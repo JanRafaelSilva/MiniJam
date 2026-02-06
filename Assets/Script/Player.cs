@@ -1,16 +1,25 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    Vector2 movimento;
+    public float speed = 5f;
+    Rigidbody2D rb;
+    public void Awake()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SetMovimento(InputAction.CallbackContext context)
     {
-        
+        movimento = context.ReadValue<Vector2>();
+    }
+    public void Movimento()
+    {
+        rb.linearVelocity = new Vector2(movimento.x * speed, movimento.y * speed);
+    }
+    void FixedUpdate()
+    {
+        Movimento();
     }
 }
