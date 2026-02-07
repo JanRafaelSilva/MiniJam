@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.IO.Compression;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,11 @@ public class Player : MonoBehaviour
     public LayerMask DefaltLayer;
     public Color gizmoColor = Color.green;
     Vector2 direction;
+    public ParticleSystem bolhas;
+
+    public float rotacaoMax = 20f;
+    float velRotacao;
+    public float smoothTime = 0.5f;
     public void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,6 +31,8 @@ public class Player : MonoBehaviour
     private void Update()
     {
         HandleAnimation();
+        HandleFlip();
+        HandleParticles();
     }
 
     void FixedUpdate()
@@ -40,6 +48,16 @@ public class Player : MonoBehaviour
     public void Movimento()
     {
         rb.AddForce(movimento * speed);
+
+        float anguloAlvo = movimento.y * rotacaoMax;
+
+        if (transform.localScale.x < 0) anguloAlvo = -anguloAlvo;
+
+        float zAtual = transform.eulerAngles.z;
+        if (zAtual > 180) zAtual -= 360;
+
+        float zNovo = Mathf.SmoothDampAngle(zAtual, anguloAlvo, ref velRotacao, smoothTime);
+        transform.rotation = Quaternion.Euler(0, 0, zNovo);
     }
 
     void HandleAnimation()
@@ -68,5 +86,53 @@ public class Player : MonoBehaviour
     {
         Gizmos.color = gizmoColor;
         Gizmos.DrawLine(transform.position, direction);
+    }
+    void HandleFlip()
+    {
+        float escalaAntiga = transform.localScale.x;
+        var linear = bolhas.velocityOverLifetime;
+        var force = bolhas.forceOverLifetime;
+
+        if (movimento.x > 0.1f) 
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+            
+            linear.x = 0.1f;
+            force.x = 0.1f;
+        }
+        else if (movimento.x < -0.1f)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+            linear.x = -0.1f;
+            force.x = -0.1f;
+        }
+
+        if (transform.localScale.x != escalaAntiga)
+        {
+            Vector3 rot = transform.eulerAngles;
+            float z = rot.z;
+            if (z > 180) z -= 360;
+
+            transform.rotation = Quaternion.Euler(0, 0, -z);
+
+            velRotacao = 0;
+        }
+
+    }
+
+    void HandleParticles()
+    {
+        if (bolhas == null) return;
+
+        var emission = bolhas.emission;
+
+        if (rb.linearVelocity.magnitude > 0.1f)
+        {
+            emission.rateOverTime = rb.linearVelocity.magnitude + 5;
+        }
+        else
+        {
+            emission.rateOverTime = 0;
+        }
     }
 }
