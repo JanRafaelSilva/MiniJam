@@ -66,9 +66,22 @@ public class Player : MonoBehaviour
     void HandleFlip()
     {
         float escalaAntiga = transform.localScale.x;
+        var linear = bolhas.velocityOverLifetime;
+        var force = bolhas.forceOverLifetime;
 
-        if (movimento.x > 0.1f) transform.localScale = new Vector3(1, 1, 1);
-        else if (movimento.x < -0.1f) transform.localScale = new Vector3(-1, 1, 1);
+        if (movimento.x > 0.1f) 
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+            
+            linear.x = 0.1f;
+            force.x = 0.1f;
+        }
+        else if (movimento.x < -0.1f)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+            linear.x = -0.1f;
+            force.x = -0.1f;
+        }
 
         if (transform.localScale.x != escalaAntiga)
         {
