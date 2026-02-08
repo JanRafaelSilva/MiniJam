@@ -31,6 +31,19 @@ public class Player : MonoBehaviour
     public float y;
     public bool OnSonda = false;
 
+    public AudioSource somMotor;
+    public float pitchMin = 0.2f;
+    public float pitchMax = 0.5f;
+
+    public AudioSource somMedo;
+    public float tempoMin = 10f;
+    public float tempoMax = 30f;
+    public float timerAmbiente;
+    public float tempoAlvo;
+
+
+    public AudioSource somSonda;
+
     public void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,6 +55,8 @@ public class Player : MonoBehaviour
         HandleAnimation();
         HandleFlip();
         HandleParticles();
+        HandleAudio();
+
         if (OnSonda)
         {
             timerSonda += Time.deltaTime;
@@ -104,16 +119,28 @@ public class Player : MonoBehaviour
     }   
     public void SetSensor(InputAction.CallbackContext value)
     {
+        if (value.started)
+        {
+            if (somSonda.isPlaying == false)
+            {
+                if (somSonda != null) somSonda.Play();
+            }
+        }
         if (value.performed)
         {
             OnSonda = true;
+
+            somSonda.loop = true;
         }
         if(value.canceled)
         {
             OnSonda = false;
             timerSonda = 0f;
+
+            somSonda.loop = false;
         }
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = gizmoColor;
@@ -165,5 +192,34 @@ public class Player : MonoBehaviour
         {
             emission.rateOverTime = 0;
         }
+    }
+
+    void HandleAudio()
+    {
+        if (somMotor == null) return;
+
+        float intensidade = rb.linearVelocity.magnitude / speed;
+        somMotor.pitch = Mathf.Lerp(pitchMin, pitchMax, intensidade);
+
+        somMotor.volume = Mathf.Lerp(0.01f, 0.05f, intensidade);
+
+        timerAmbiente += Time.deltaTime;
+
+        if (timerAmbiente >= tempoAlvo)
+        {
+            if (somMedo != null)
+            {
+                somMedo.pitch = Random.Range(0.7f, 1f);
+                somMedo.Play();
+
+                timerAmbiente = 0;
+
+                tempoAlvo = Random.Range(tempoMin, tempoMax);
+            }
+
+        }
+
+
+
     }
 }
