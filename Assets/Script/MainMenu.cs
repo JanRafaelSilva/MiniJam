@@ -31,6 +31,11 @@ public class MainMenu : MonoBehaviour
         // O nome "Menu" deve ser exatamente o nome da cena no Build Settings.
         SceneManager.LoadScene("Menu");
     }
+    public void Tutorial()
+    {
+        // O nome "Menu" deve ser exatamente o nome da cena no Build Settings.
+        SceneManager.LoadScene("Tutorial");
+    }
 
     // Fecha o jogo
     public void QuitGame()

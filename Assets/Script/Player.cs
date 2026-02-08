@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     public float x;
     public float y;
     public bool OnSonda = false;
+    public float timerBateria;
+    public int bateria = 100;
 
     public void Awake()
     {
@@ -44,13 +46,23 @@ public class Player : MonoBehaviour
         HandleParticles();
         if (OnSonda)
         {
-            timerSonda += Time.deltaTime;
-            var controle = sonda.gameObject.GetComponent<Sonda>();
-            controle.direction(x, y);
-            if (timerSonda >= 0.2f)
+            timerBateria += Time.deltaTime;
+            if (bateria > 0)
             {
-                Instantiate(sonda, transform.position, Quaternion.identity);
-                timerSonda = 0f;
+                timerSonda += Time.deltaTime;
+                var controle = sonda.gameObject.GetComponent<Sonda>();
+                controle.direction(x, y);
+                if (timerSonda >= 0.2f)
+                {
+                    Instantiate(sonda, transform.position, Quaternion.identity);
+                    timerSonda = 0f;
+                    var cont = mainCamera.gameObject.GetComponent<Bateria>();
+                    cont.VidaBarMenos((int)timerBateria);
+                }
+                if(timerBateria >= 1f)
+                {
+                    timerBateria = 1f;
+                }
             }
         }
     }
@@ -113,6 +125,10 @@ public class Player : MonoBehaviour
             OnSonda = false;
             timerSonda = 0f;
         }
+    }
+    public void receberBateria(int a)
+    {
+        bateria = a;
     }
     private void OnDrawGizmos()
     {
