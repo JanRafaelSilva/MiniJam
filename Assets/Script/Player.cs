@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
             timerSonda += Time.deltaTime;
             var controle = sonda.gameObject.GetComponent<Sonda>();
             controle.direction(x, y);
-            if (timerSonda >= 0.4f)
+            if (timerSonda >= 0.2f)
             {
                 Instantiate(sonda, transform.position, Quaternion.identity);
                 timerSonda = 0f;

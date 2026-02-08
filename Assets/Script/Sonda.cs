@@ -3,7 +3,7 @@ using UnityEngine;
 public class Sonda : MonoBehaviour
 {
     public Rigidbody2D rigid;
-    public float force = 2;
+    public float force = 1;
     public float timer;
     private GameObject Mouse;
     public Vector2 a;
