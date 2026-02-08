@@ -28,7 +28,7 @@ public class Sonda : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if(timer >= 1f){
+        if(timer >= 1.5f){
             Destroy(this.gameObject);
         }
     }
