@@ -22,6 +22,15 @@ public class Player : MonoBehaviour
     public float rotacaoMax = 20f;
     float velRotacao;
     public float smoothTime = 0.5f;
+    public float OffsetRadius;
+
+    public GameObject sonda;
+    public float timerSonda;
+    Vector2 mousePosition;
+    public float x;
+    public float y;
+    public bool OnSonda = false;
+
     public void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -33,12 +42,22 @@ public class Player : MonoBehaviour
         HandleAnimation();
         HandleFlip();
         HandleParticles();
+        if (OnSonda)
+        {
+            timerSonda += Time.deltaTime;
+            var controle = sonda.gameObject.GetComponent<Sonda>();
+            controle.direction(x, y);
+            if (timerSonda >= 0.4f)
+            {
+                Instantiate(sonda, transform.position, Quaternion.identity);
+                timerSonda = 0f;
+            }
+        }
     }
 
     void FixedUpdate()
     {
         Movimento();
-       Physics2D.LinecastAll(transform.position, direction, DefaltLayer);
     }
 
     public void SetMovimento(InputAction.CallbackContext context)
@@ -68,24 +87,36 @@ public class Player : MonoBehaviour
 
         anim.speed = Mathf.Lerp(anim.speed, velocidadeReal / 2, Time.deltaTime * 5f);
     }
+
+    public Vector3 GetMouseWorldPosition()
+    {
+        return mouseWorldPosition;
+    }
+
     public void SetMouse(InputAction.CallbackContext value)
     {
         var look = value.ReadValue<Vector2>();
-        direction = Vector2.ClampMagnitude(mainCamera.ScreenToWorldPoint(look), 5f);
         mouseWorldPosition = mainCamera.ScreenToWorldPoint(look);
         // Vetor que transforma o ponto do espaço da tela no espaço mundial
         mouseWorldPosition.z = 0f;
-    }
+        x = mouseWorldPosition.x;
+        y = mouseWorldPosition.y;
+    }   
     public void SetSensor(InputAction.CallbackContext value)
     {
         if (value.performed)
         {
+            OnSonda = true;
+        }
+        if(value.canceled)
+        {
+            OnSonda = false;
+            timerSonda = 0f;
         }
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = gizmoColor;
-        Gizmos.DrawLine(transform.position, direction);
     }
     void HandleFlip()
     {

@@ -5268,6 +5268,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2965692947727597852, guid: aecd79308493c09468331d3419fb5a09, type: 3}
+      propertyPath: sonda
+      value: 
+      objectReference: {fileID: 7874839053959927311, guid: 098dae9166528b144a317b7cc9ba1120, type: 3}
+    - target: {fileID: 2965692947727597852, guid: aecd79308493c09468331d3419fb5a09, type: 3}
       propertyPath: speed
       value: 1
       objectReference: {fileID: 0}

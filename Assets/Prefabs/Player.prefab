@@ -201,6 +201,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c10cbb68-e6df-4898-a440-9ef8fce1618c
     m_ActionName: "Player/movimenta\xE7\xE3o[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]"
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 76f20a61-8968-46bc-8026-16cb493c61a5
+    m_ActionName: 'Player/Mouse[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9f36bb1c-9f78-43ab-b852-27ad1d71363b
+    m_ActionName: 'Player/Sensor[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -219,6 +227,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 2.5
+  mainCamera: {fileID: 0}
+  DefaltLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
+  bolhas: {fileID: 0}
+  rotacaoMax: 20
+  smoothTime: 0.5
+  OffsetRadius: 0
+  sonda: {fileID: 0}
+  timerSonda: 0
+  x: 0
+  y: 0
+  OnSonda: 0
 --- !u!95 &3658035954101542728
 Animator:
   serializedVersion: 7
