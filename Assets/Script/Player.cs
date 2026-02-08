@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     public float y;
     public bool OnSonda = false;
     public float timerBateria;
-    public int bateria = 100;
+    public int bateria = 1000;
 
     public AudioSource somMotor;
     public float pitchMin = 0.2f;
