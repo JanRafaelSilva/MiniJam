@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Sonda : MonoBehaviour
 {
@@ -7,12 +8,16 @@ public class Sonda : MonoBehaviour
     public float timer;
     private GameObject Mouse;
     public Vector2 a;
+    public Tilemap tilemap;
+
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
     }
     public void Start()
     {
+        
         Vector3 direcao = a - (Vector2)transform.position;
         rigid.linearVelocity = new Vector2(direcao.x, direcao.y).normalized * force;
 
@@ -30,6 +35,14 @@ public class Sonda : MonoBehaviour
         timer += Time.deltaTime;
         if(timer >= 1.5f){
             Destroy(this.gameObject);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Sonda"))
+        {
+            //tilemap = collision.gameObject.GetComponent<Tilemap>();   
+             //  tilemap = Tilemap.SetColor(Vector3(collsion.position), Color.red);
         }
     }
 }
