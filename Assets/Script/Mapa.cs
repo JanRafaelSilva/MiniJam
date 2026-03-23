@@ -2,25 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 public class Mapa : MonoBehaviour
 {
     private Tilemap tileMap;
+    
     private void Start()
     {
         tileMap = GetComponent<Tilemap>();
+        //Vector3Int cell = tileMap.WorldToCell(every);
+        //tileMap.SetColor(cell);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Sonda"))
         {
-            Debug.Log("bateu lenda");
-            Vector3 pos = collision.transform.position;
+            for(int quantidade = 0; quantidade < collision.contactCount; quantidade++) { 
+            ContactPoint2D contact = collision.GetContact(quantidade);
+            Vector3 pos = contact.point - (contact.normal / 2f);
             Vector3Int cell = tileMap.WorldToCell(pos);
-            tileMap.RemoveTileFlags(new Vector3Int(cell.x,cell.y,0), TileFlags.LockColor);
-            tileMap.SetColor(new Vector3Int(cell.x, cell.y, 0), Color.white);
+            if (tileMap.HasTile(cell))
+                {
+                    tileMap.RemoveTileFlags(new Vector3Int(cell.x, cell.y, 0), TileFlags.LockColor);
+                    tileMap.SetColor(new Vector3Int(cell.x, cell.y, 0), Color.blue);
+                    Destroy(collision.gameObject);
+                }
+            }
+        }
+
         }
     }
-}
+
+//private ContactPoint[] contacts;
 //Vector3Int cell = tilemap.WorldToCell(pos);
 //+private float[,] blockTempDataMap = new float[250, 150];
 
